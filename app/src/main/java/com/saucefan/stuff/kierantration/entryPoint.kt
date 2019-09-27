@@ -55,11 +55,17 @@ fun popText(string:String){
     Toast.makeText(this, string,Toast.LENGTH_SHORT).show()
 }
     fun sanitizeEntries() {
-        var rows = et_rows.editableText
-        var columns =et_rows.editableText
-        val i = Intent(this, MainActivity::class.java)
-        i.putExtra("ourRows", rows)
-        i.putExtra("ourNumbers", columns)
-        startActivity(i)
+        val rows = et_rows.text.toString().toInt()
+        val columns =et_columns.text.toString().toInt()
+
+        if (rows <= 0 || columns <=0){
+            Toast.makeText(this,"Sorry we can't make a board without a real number of rows and columns! Try again!",Toast.LENGTH_SHORT).show()
+        }
+        else {
+            val i = Intent(this, MainActivity::class.java)
+            i.putExtra("ourRows", rows)
+            i.putExtra("ourColumns", columns)
+            startActivity(i)
+        }
     }
 }
