@@ -29,6 +29,7 @@ class entryPoint : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
                 popText(s.toString())
+                editSanitization(s)
             }
         })
         et_rows.addTextChangedListener(object : TextWatcher {
@@ -39,11 +40,12 @@ class entryPoint : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
                 popText(s.toString())
+
+
+                editSanitization(s)
             }
         })
-
-
-
+        
         btn_enter.setOnClickListener{
             sanitizeEntries()
 
@@ -51,7 +53,29 @@ class entryPoint : AppCompatActivity() {
         }
     }
 
-fun popText(string:String){
+
+    // probably a more elegan way to do this but basically...
+    // checks if there's a char sequence at all,
+    // checks if the first character is a
+    // if there's some digits beyond the zero to the right, it keeps them in the field
+    // if zero would be the only number, it makes it a one instead
+    fun editSanitization(s: CharSequence) {
+        if (s.isNotEmpty()) {
+            if (s.substring(0, 1).contains("0") && s.length >= 2) {
+                if (et_rows.text.isNotEmpty()) {
+                    et_rows.setText(et_rows.text.substring(1, et_rows.text.length))
+                    return
+                }
+            } else if (s.toString() == "0") {
+                et_rows.setText("1")
+            }
+        }
+    }
+
+
+
+    fun popText(string:String){
+
     Toast.makeText(this, string,Toast.LENGTH_SHORT).show()
 }
     fun sanitizeEntries() {
