@@ -16,7 +16,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        var rows =intent.getStringExtra("rows")
+        var columns = intent.getStringExtra("columns")
     makeGrid(5,5)
 
 

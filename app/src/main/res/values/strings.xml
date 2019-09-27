@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">KieranTration</string>
+    <string name="rows">Rows</string>
+    <string name="columns">Columns</string>
+    <string name="Columns">Columns</string>
+    <string name="set_the_size_of_your_game">Set the size of your game!</string>
 </resources>
