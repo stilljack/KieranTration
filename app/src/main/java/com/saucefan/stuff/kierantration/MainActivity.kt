@@ -65,8 +65,7 @@ class MainActivity : AppCompatActivity() {
             val params = GridLayout.LayoutParams(GridLayout.spec(row, 1.1f), GridLayout.spec(column, 1f))
             view.layoutParams =params
             view.tag="$column/$row"
-            val newc=column
-            val newr = row
+            view.id = i
 
             view.setOnClickListener {
                 checkTile(i,it.tag as String)
@@ -94,7 +93,7 @@ class MainActivity : AppCompatActivity() {
     fun checkTile(position:Int,tag:String){
         Toast.makeText(this,"previous $position -- tag:$tag -- current ${gridView.size} c:${gridView.columnCount}  r:${gridView.rowCount}",Toast.LENGTH_SHORT).show()
     }
-    inner class TileObj (val column:Int,val Row:Int){
+  fun picInto(position: Int,resource:Int) {
 
-    }
+  }
 }
