@@ -62,7 +62,7 @@ class entryPoint : AppCompatActivity() {
                     return
                 }
             } else if (s.toString() == "0") {
-                et_rows.setText("birdFour")
+                et_rows.setText("birdfour")
             }
         }
     }

@@ -1,11 +1,13 @@
 package com.saucefan.stuff.kierantration
 
+import android.graphics.BlendMode
 import android.os.Bundle
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.size
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -43,12 +45,24 @@ class MainActivity : AppCompatActivity() {
         var row = 0
         var column = 0
         for (i in 0 until itemsCount) {
-            val view = ImageView(this)
+            var view = ImageView(this)
             //change birds!
             when (i % 7) {
-
+                0->view.setBackgroundColor(getColor(R.color.colorBackground))
+                1-> view.setBackgroundColor(getColor(R.color.colorAccent))
+                2-> view.setBackgroundColor(getColor(R.color.colorAccent))
+                3-> view.setBackgroundColor(getColor(R.color.colorBackgroundAccent))
+                4-> view.setBackgroundColor(getColor(R.color.colorAccent))
+                5->view.setBackgroundColor(getColor(R.color.colorBackgroundAccent))
+                6->Picasso.get()
+                    .load(R.drawable.face)
+                    .resize(50, 50)
+                    .centerCrop()
+                    .into(view)
             }
-            val params = GridLayout.LayoutParams(GridLayout.spec(row, 1f), GridLayout.spec(column, 1f))
+
+
+            val params = GridLayout.LayoutParams(GridLayout.spec(row, 1.1f), GridLayout.spec(column, 1f))
             view.layoutParams =params
             view.tag="$column/$row"
             val newc=column
@@ -67,6 +81,10 @@ class MainActivity : AppCompatActivity() {
                 column = 0
                 row++
             }
+
+
+
+
         }
 
     }
