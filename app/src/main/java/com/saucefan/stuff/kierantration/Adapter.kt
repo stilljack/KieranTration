@@ -2,19 +2,24 @@ package com.saucefan.stuff.kierantration
 
 
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.grid_view.view.*
 
 
-class CardAdapter: androidx.recyclerview.widget.ListAdapter<Card,CardAdapter.CardViewHolder>(DIFF_REVIEW_CALLBACK){
-
-
+class CardAdapter(context: Context): androidx.recyclerview.widget.ListAdapter<Card,CardAdapter.CardViewHolder>(DIFF_REVIEW_CALLBACK){
+    val contxt=context
+    var firstclick=-1
+    var secondclick=0
+    lateinit var listener:onMatchListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         return CardViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.grid_view, parent, false) as View)
@@ -56,19 +61,43 @@ class CardAdapter: androidx.recyclerview.widget.ListAdapter<Card,CardAdapter.Car
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val currentCard: Card
+        if (contxt is onMatchListener){
+            listener =contxt
+        }
 
 
         if (position != RecyclerView.NO_POSITION) {
             currentCard=getItemAt(position)
-            holder.cardBack = pic
+            Picasso.get()
+                .load(currentCard.backImage as Int)
+                .resize(300, 300)
+                .centerInside()
+                .into(holder.cardBack)
+            holder.cardBack.setOnClickListener{
+                listener.match(currentCard,currentCard)
+
+            }
         }
 
 
     }
+ fun decider(position:Int,context: Context) {
+     if (firstclick!=-1) {
+         val first:Card =getItemAt(firstclick)
+         val second:Card = getItemAt(secondclick)
+         if(first.name == second.name){
+             Toast.makeText(context,"yay they match!",Toast.LENGTH_SHORT).show()
+
+     }
 
 
+     }
 
+ }
 
+    interface onMatchListener{
+        fun match(cardOne:Card,cardTwo:Card)
+    }
 
 
 

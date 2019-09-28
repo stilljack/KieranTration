@@ -1,50 +1,140 @@
 package com.saucefan.stuff.kierantration
 
-import android.graphics.BlendMode
 import android.os.Bundle
-import android.widget.GridLayout
-import android.widget.ImageView
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.size
-import com.squareup.picasso.Picasso
+import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.grid_view.*
+import timber.log.Timber
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CardAdapter.onMatchListener {
+    override fun match(cardOne: Card, cardTwo: Card) {
+        Toast.makeText(this,cardOne.toString(),Toast.LENGTH_SHORT).show()
+        cardList.remove(cardOne)
+        cardList.remove(cardTwo)
+        recycle_view.adapter?.notifyDataSetChanged()
+    }
 
+    val cardList = mutableListOf<Card>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val rows =intent.getIntExtra("ourRows", 4)
+        val rows = intent.getIntExtra("ourRows", 4)
         val columns = intent.getIntExtra("ourColumns", 4)
-       makeGrid(columns,rows)
-
-
+        val returnValues:List<Int> = makeCard(columns, rows)
+        var adapter = CardAdapter(this)
+        recycle_view.layoutManager=GridLayoutManager(this, columns)
+        recycle_view.adapter = adapter
+        if (!cardList.isNullOrEmpty()) {
+            cardList.shuffle()
+            adapter.submitList(cardList)
+            Timber.i(cardList.toString())
+        }
 
     }
 
 
+    fun makeCard(maxColumns: Int, maxRows: Int): List<Int> {
+        //   gridView.columnCount =maxColumns
+        //    gridView.rowCount =maxRows
+        //get total item count
+        var itemsCount = maxColumns * maxRows
+        if (itemsCount % 2 == 0) {
+            Toast.makeText(this, "is even", Toast.LENGTH_SHORT).show()
+            //cool game it winnable
+        } else {
+            //game would be unwinnable so we add one to row
+            itemsCount = maxColumns * (maxRows + 1)
+            Toast.makeText(
+                this,
+                "uh oh! we had to add a row, can you figure out why? Hint: we want you to be able to win!",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        for (i in 0 until itemsCount) {
+            //we're gonna make cards now
+
+            val newCard = Card()
+
+            when (i % 7) {
+                0 -> newCard.apply {
+                    name = "face"
+                    fronImage = R.drawable.face
+                    gValue = i
+                }
+                1 -> newCard.apply {
+                    name = "birdone"
+                    fronImage = R.drawable.birdone
+                    gValue = i
+                }
+                2 -> newCard.apply {
+                    name = "birdtwo"
+                    fronImage = R.drawable.birdtwo
+                    gValue = i
+                }
+                3 -> newCard.apply {
+                    name = "birdthree"
+                    fronImage = R.drawable.birdthree
+                    gValue = i
+                }
+                4 -> newCard.apply {
+                    name = "birdfour"
+                    fronImage = R.drawable.birdfour
+                    gValue = i
+                }
+                5 -> newCard.apply {
+                    name = "birdfive"
+                    fronImage = R.drawable.birdfive
+                    gValue = i
+                }
+                6 -> newCard.apply {
+                    name = "birdsix"
+                    fronImage = R.drawable.birdsix
+                    gValue = i
+                }
+            }
+            cardList.add(newCard)
+        }
+        return listOf(maxColumns,maxRows,itemsCount,cardList.size)
+    }
 
 
-    fun makeGrid(maxColumns: Int, maxRows: Int) {
-        gridView.columnCount =maxColumns
-        gridView.rowCount =maxRows
-        var itemsCount = gridView.columnCount * gridView.rowCount
+        //check tile will check the tile clicked,
+        fun checkTile(position: Int, tag: String) {
+            Toast.makeText(
+                this,
+                "previous $position -- tag:$tag -- current ",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+    }
+
+
+/*
+  //   gridView.columnCount =maxColumns
+    //    gridView.rowCount =maxRows
+        //get total item count
+        var itemsCount = maxColumns * maxRows
         if (itemsCount%2 ==0){
             Toast.makeText(this,"is even",Toast.LENGTH_SHORT).show()
+            //cool game it winnable
         }
         else{
-            gridView.columnCount++
-            itemsCount = maxColumns * maxRows
-            val new = gridView.rowCount * gridView.columnCount
+            //game would be unwinnable so we add one to row
+            itemsCount=maxColumns *(maxRows+1)
             Toast.makeText(this,"uh oh! we had to add a row, can you figure out why? Hint: we want you to be able to win!",Toast.LENGTH_LONG).show()
         }
         var row = 0
         var column = 0
         for (i in 0 until itemsCount) {
+            //we're gonna make cards now
             var view = ImageView(this)
             //change birds!
             when (i % 7) {
@@ -83,17 +173,4 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-        }
-
-    }
-
-
-    //check tile will check the tile clicked,
-    fun checkTile(position:Int,tag:String){
-        Toast.makeText(this,"previous $position -- tag:$tag -- current ${gridView.size} c:${gridView.columnCount}  r:${gridView.rowCount}",Toast.LENGTH_SHORT).show()
-    }
-  fun picInto(position: Int,resource:Int) {
-
-  }
-}
+ */
