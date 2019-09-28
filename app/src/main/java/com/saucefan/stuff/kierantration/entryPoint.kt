@@ -1,18 +1,12 @@
 package com.saucefan.stuff.kierantration
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import androidx.annotation.MainThread
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_entry_point.*
-import android.content.Intent
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
 
 
 class entryPoint : AppCompatActivity() {
@@ -68,7 +62,7 @@ class entryPoint : AppCompatActivity() {
                     return
                 }
             } else if (s.toString() == "0") {
-                et_rows.setText("1")
+                et_rows.setText("birdFour")
             }
         }
     }

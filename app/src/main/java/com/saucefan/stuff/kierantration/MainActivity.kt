@@ -1,10 +1,10 @@
 package com.saucefan.stuff.kierantration
 
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.*
-import androidx.core.view.get
+import android.widget.GridLayout
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.size
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -44,15 +44,9 @@ class MainActivity : AppCompatActivity() {
         var column = 0
         for (i in 0 until itemsCount) {
             val view = ImageView(this)
-            //change colors
+            //change birds!
             when (i % 7) {
-                0 -> view.setBackgroundColor(Color.RED)
-                1 -> view.setBackgroundColor(Color.GREEN)
-                2-> view.setBackgroundColor(Color.BLACK)
-                3 -> view.setBackgroundColor(Color.BLUE)
-                4->view.setBackgroundColor(Color.YELLOW)
-                5->view.setBackgroundColor(Color.GRAY)
-                6->view.setBackgroundColor(Color.CYAN)
+
             }
             val params = GridLayout.LayoutParams(GridLayout.spec(row, 1f), GridLayout.spec(column, 1f))
             view.layoutParams =params
