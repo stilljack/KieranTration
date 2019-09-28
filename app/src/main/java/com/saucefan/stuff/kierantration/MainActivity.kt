@@ -5,38 +5,53 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.size
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import com.saucefan.stuff.kierantration.GameLogicViewModel.Companion.cardList
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.grid_view.*
 import timber.log.Timber
 
 
 class MainActivity : AppCompatActivity(), CardAdapter.onMatchListener {
+
+
     override fun match(cardOne: Card, cardTwo: Card) {
-        Toast.makeText(this,cardOne.toString(),Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, cardOne.toString(), Toast.LENGTH_SHORT).show()
         cardList.remove(cardOne)
         cardList.remove(cardTwo)
         recycle_view.adapter?.notifyDataSetChanged()
     }
 
-    val cardList = mutableListOf<Card>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val model = ViewModelProviders.of(this)[GameLogicViewModel::class.java]
+
         val rows = intent.getIntExtra("ourRows", 4)
         val columns = intent.getIntExtra("ourColumns", 4)
-        val returnValues:List<Int> = makeCard(columns, rows)
+        val returnValues: List<Int> = makeCard(columns, rows)
         var adapter = CardAdapter(this)
-        recycle_view.layoutManager=GridLayoutManager(this, columns)
+        recycle_view.layoutManager = GridLayoutManager(this, columns)
         recycle_view.adapter = adapter
         if (!cardList.isNullOrEmpty()) {
             cardList.shuffle()
-            adapter.submitList(cardList)
+           // adapter.submitList(cardList)
             Timber.i(cardList.toString())
         }
+         model.gimmieTheListAsLiveData().observe(this, Observer<MutableList<Card>> {
+            updateRecyclerView(adapter,it)
+        })
 
+    }
+
+
+    fun updateRecyclerView(adapter: CardAdapter, list: MutableList<Card>) {
+        adapter.submitList(list as List<Card>)
+        adapter.notifyDataSetChanged()
     }
 
 
