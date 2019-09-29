@@ -22,7 +22,7 @@ class entryPoint : AppCompatActivity() {
             }
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
-                popText(s.toString())
+          //      popText(s.toString())
                 editSanitization(s)
             }
         })
@@ -33,7 +33,7 @@ class entryPoint : AppCompatActivity() {
             }
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
-                popText(s.toString())
+           //     popText(s.toString())
 
 
                 editSanitization(s)

@@ -22,14 +22,15 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
 
 
-class MainActivity : AppCompatActivity(), CardAdapter.onMatchListener {
-
+class MainActivity : AppCompatActivity(), CardGridAdapter.onMatchListener {
+    private lateinit var gridViewAdapter:CardGridAdapter
 
     override fun match(cardOne: Card, cardTwo: Card) {
         Toast.makeText(this, cardOne.toString(), Toast.LENGTH_SHORT).show()
+        gridViewAdapter.dataSource.remove(cardOne)
         cardList.remove(cardOne)
         cardList.remove(cardTwo)
-        recycle_view.adapter?.notifyDataSetChanged()
+        updateGridView(gridViewAdapter)
     }
 
 
@@ -53,27 +54,30 @@ class MainActivity : AppCompatActivity(), CardAdapter.onMatchListener {
 
 
 
-        var adapter = CardAdapter(this)
-        var layoutManager = GridLayoutManager(this, columns)
+      /* var adapter = CardAdapter(this)
+      var layoutManager = GridLayoutManager(this, columns)
         recycle_view.layoutManager=layoutManager
         recycle_view.adapter = adapter
+*/
 
-
-        recycle_view.hasFixedSize()
-        if (!cardList.isNullOrEmpty()) {
+         if (!cardList.isNullOrEmpty()) {
             cardList.shuffle()
            // adapter.submitList(cardList)
             Timber.i(cardList.toString())
+             gridViewAdapter = CardGridAdapter(this, cardList)
+             gridview.adapter=gridViewAdapter
         }
-         model.gimmieTheListAsLiveData().observe(this, Observer<MutableList<Card>> {
-            updateRecyclerView(adapter,it)
-        })
 
-
-
+       /* model.gimmieTheListAsLiveData().observe(this, Observer<MutableList<Card>> {
+            // updateRecyclerView(adapter,it)
+            updateGridView(gridViewAdapter)
+        })*/
     }
 
+        fun updateGridView (adapter: CardGridAdapter) {
 
+            adapter.notifyDataSetChanged()
+        }
     fun updateRecyclerView(adapter: CardAdapter, list: MutableList<Card>) {
         adapter.submitList(list)
         adapter.notifyDataSetChanged()

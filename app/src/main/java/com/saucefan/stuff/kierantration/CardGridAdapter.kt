@@ -4,9 +4,56 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import com.squareup.picasso.Picasso
+
+
+class CardGridAdapter( val context: Context, val dataSource:MutableList<Card>) :BaseAdapter( ) {
+
+   // private val inflater: LayoutInflater = LayoutInflater.from(context)
+    lateinit var listener:onMatchListener
+    interface onMatchListener{
+        fun match(cardOne:Card,cardTwo:Card)
+    }
+
+    override fun getView(position:Int, convertView:View?, parent:ViewGroup): View {
+        val currentCard:Card=getItem(position)
+          val view: ImageView= ImageView(context)
+          view.tag=currentCard
+
+
+          Picasso.get()
+              .load(currentCard.fronImage as Int)
+              .resize(75,75)
+              .centerInside()
+              .into(view)
+
+        if (context is CardGridAdapter.onMatchListener){
+            listener = context
+        }
+        view.setOnClickListener {
+            listener.match(currentCard,currentCard)
+        }
+        return view
+    }
+
+    override fun getItem(p0: Int): Card {
+        return dataSource[p0]
+    }
+
+    override fun getItemId(p0: Int): Long {
+        return p0.toLong()
+    }
+
+    override fun getCount(): Int {
+
+        return dataSource.size
+    }
+
+}
 
 /*
 

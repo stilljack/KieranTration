@@ -121,6 +121,7 @@ class GameLogicViewModel(application:Application) : AndroidViewModel(application
                     }
                 }
                 cardList.add(newCard)
+                newCard.gValue=r.nextInt(0,100)
                 cardList.add(newCard)
 
 
