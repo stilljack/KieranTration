@@ -30,7 +30,7 @@ class CardAdapter(context: Context): androidx.recyclerview.widget.ListAdapter<Ca
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.grid_view,parent,false)
         val layoutParams =  itemView.layoutParams
-        layoutParams.height = (parent.height * 0.3 as Int)
+        layoutParams.height = (parent.height * 3 as Int)
         itemView.setLayoutParams(layoutParams)
         return CardViewHolder(itemView)
     }
