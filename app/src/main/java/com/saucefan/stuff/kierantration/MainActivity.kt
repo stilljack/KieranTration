@@ -22,12 +22,19 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
 
 
-class MainActivity : AppCompatActivity(), CardGridAdapter.onMatchListener {
-    private lateinit var gridViewAdapter:CardGridAdapter
+class MainActivity : AppCompatActivity(), CardGridAdapter.onMatchListener  {
+    override fun clickCard(card: Card): Boolean {
+        if(model.checkCard(card)) {
+            return true
+        }
+        return false
+    }
 
-    override fun match(cardOne: Card, cardTwo: Card) {
+
+    private lateinit var gridViewAdapter:CardGridAdapter
+    private lateinit var model:GameLogicViewModel
+     fun match(cardOne: Card, cardTwo: Card) {
         Toast.makeText(this, cardOne.toString(), Toast.LENGTH_SHORT).show()
-        gridViewAdapter.dataSource.remove(cardOne)
         cardList.remove(cardOne)
         cardList.remove(cardTwo)
         updateGridView(gridViewAdapter)
@@ -38,7 +45,7 @@ class MainActivity : AppCompatActivity(), CardGridAdapter.onMatchListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         // get the view model
-        val model = ViewModelProviders.of(this)[GameLogicViewModel::class.java]
+         model = ViewModelProviders.of(this)[GameLogicViewModel::class.java]
         val rows = intent.getIntExtra("ourRows", 4)
         val columns = intent.getIntExtra("ourColumns", 4)
 
@@ -64,7 +71,7 @@ class MainActivity : AppCompatActivity(), CardGridAdapter.onMatchListener {
             cardList.shuffle()
            // adapter.submitList(cardList)
             Timber.i(cardList.toString())
-             gridViewAdapter = CardGridAdapter(this, cardList)
+             gridViewAdapter = CardGridAdapter(this)
              gridview.adapter=gridViewAdapter
         }
 

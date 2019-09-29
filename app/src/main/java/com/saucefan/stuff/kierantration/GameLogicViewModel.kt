@@ -2,38 +2,70 @@ package com.saucefan.stuff.kierantration
 
 import android.app.Application
 import android.content.Context
-import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 
-import androidx.lifecycle.MutableLiveData
 import com.saucefan.stuff.kierantration.gamelogic.GameState
-import java.util.*
+import timber.log.Timber
 import kotlin.random.Random
+import android.os.Bundle
+import android.app.Activity
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 class GameLogicViewModel(application:Application) : AndroidViewModel(application) {
+
+
+
+
     //here's where we're gonna store the current game, that way hopefully it will live through view changes.
-    val LiveList: MutableLiveData<MutableList<Card>> by lazy {
+   /* val LiveList: MutableLiveData<MutableList<Card>> by lazy {
         MutableLiveData<MutableList<Card>>()
-    }
+    }*/
+
+
+
     companion object {
+        var cardOne:Card =Card()
         var cardList = mutableListOf<Card>()
         var gState:GameState = GameState.NEW
     }
 
-        fun gimmieTheListAsLiveData(): MutableLiveData<MutableList<Card>> {
+
+
+    /*    fun gimmieTheListAsLiveData(): MutableLiveData<MutableList<Card>> {
             if (cardList.isNotEmpty()) {
                 LiveList.value= cardList
             }
             return LiveList
-        }
+        }*/
 
 
     //init game state
 
     //check if cardlist already has cards, if so don't remake state
+    fun checkCard(newCard: Card):Boolean {
+        //if card matches imemediate previous card do this
+        if (cardOne.fronImage==newCard.fronImage) {
+            // is a match
+            return true
+            }
+        //if this is the first card revealed, set cardOne to a new card and let the adapter know to keep the card revealed
+        else if (cardOne ==Card()) {
+            cardOne = newCard
+            return false
+        }
+        //else we need to reset cardOne to default
+        cardOne=Card()
+        //we need to return true to let the adapter know to hide the card
+        return true
 
+
+
+
+    }
     fun initGameState(vararg ints:Int) {
         //check if we're in a new game
         if (gState == GameState.NEW) {

@@ -8,15 +8,17 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import com.saucefan.stuff.kierantration.GameLogicViewModel.Companion.cardList
 import com.squareup.picasso.Picasso
 
 
-class CardGridAdapter( val context: Context, val dataSource:MutableList<Card>) :BaseAdapter( ) {
-
+class CardGridAdapter( val context: Context) :BaseAdapter( ) {
+ //   lateinit var dataSource:MutableList<Card>
    // private val inflater: LayoutInflater = LayoutInflater.from(context)
     lateinit var listener:onMatchListener
+    val flipedCardPosition:Int =0
     interface onMatchListener{
-        fun match(cardOne:Card,cardTwo:Card)
+        fun clickCard(card: Card):Boolean
     }
 
     override fun getView(position:Int, convertView:View?, parent:ViewGroup): View {
@@ -35,13 +37,15 @@ class CardGridAdapter( val context: Context, val dataSource:MutableList<Card>) :
             listener = context
         }
         view.setOnClickListener {
-            listener.match(currentCard,currentCard)
+            if(listener.clickCard(currentCard)){
+
+            }
         }
         return view
     }
 
     override fun getItem(p0: Int): Card {
-        return dataSource[p0]
+        return cardList[p0]
     }
 
     override fun getItemId(p0: Int): Long {
@@ -50,7 +54,7 @@ class CardGridAdapter( val context: Context, val dataSource:MutableList<Card>) :
 
     override fun getCount(): Int {
 
-        return dataSource.size
+        return cardList.size
     }
 
 }
