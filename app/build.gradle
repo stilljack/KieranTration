@@ -46,6 +46,6 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$aac_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$aac_version"
    // kapt "androidx.lifecycle:lifecycle-compiler:$aac_version"
-
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
 
 }

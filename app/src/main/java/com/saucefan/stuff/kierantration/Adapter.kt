@@ -7,12 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.grid_view.view.*
+
+
+
+
+
 
 
 class CardAdapter(context: Context): androidx.recyclerview.widget.ListAdapter<Card,CardAdapter.CardViewHolder>(DIFF_REVIEW_CALLBACK){
@@ -21,9 +25,14 @@ class CardAdapter(context: Context): androidx.recyclerview.widget.ListAdapter<Ca
     var secondclick=0
     lateinit var listener:onMatchListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
-        return CardViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.grid_view, parent, false) as View)
 
+
+        val inflater = LayoutInflater.from(parent.context)
+        val itemView = inflater.inflate(R.layout.grid_view,parent,false)
+        val layoutParams =  itemView.layoutParams
+        layoutParams.height = (parent.height * 0.3 as Int)
+        itemView.setLayoutParams(layoutParams)
+        return CardViewHolder(itemView)
     }
 
 
@@ -45,18 +54,12 @@ class CardAdapter(context: Context): androidx.recyclerview.widget.ListAdapter<Ca
     }
 
     class CardViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
         val cardFront: ImageView = view.cardFront
         val cardBack:ImageView = view.cardBack
-
-
-
     }
     fun getItemAt(position: Int): Card {
         return getItem(position)
     }
-
-
 
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
@@ -65,12 +68,11 @@ class CardAdapter(context: Context): androidx.recyclerview.widget.ListAdapter<Ca
             listener =contxt
         }
 
-
         if (position != RecyclerView.NO_POSITION) {
             currentCard=getItemAt(position)
             Picasso.get()
                 .load(currentCard.backImage as Int)
-                .resize(300, 300)
+                .resize(75,75)
                 .centerInside()
                 .into(holder.cardBack)
             holder.cardBack.setOnClickListener{

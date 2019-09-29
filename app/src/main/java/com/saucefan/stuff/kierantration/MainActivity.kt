@@ -13,6 +13,13 @@ import com.saucefan.stuff.kierantration.GameLogicViewModel.Companion.cardList
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.grid_view.*
 import timber.log.Timber
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 class MainActivity : AppCompatActivity(), CardAdapter.onMatchListener {
@@ -29,14 +36,30 @@ class MainActivity : AppCompatActivity(), CardAdapter.onMatchListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // get the view model
         val model = ViewModelProviders.of(this)[GameLogicViewModel::class.java]
-
         val rows = intent.getIntExtra("ourRows", 4)
         val columns = intent.getIntExtra("ourColumns", 4)
-        val returnValues: List<Int> = makeCard(columns, rows)
+
+
+
+
+        // Set the height by params
+
+        // set height of RecyclerView
+
+        //init/resume/establish game state
+        model.initGameState(rows,columns) //call and init game state with params
+
+
+
         var adapter = CardAdapter(this)
-        recycle_view.layoutManager = GridLayoutManager(this, columns)
+        var layoutManager = GridLayoutManager(this, columns)
+        recycle_view.layoutManager=layoutManager
         recycle_view.adapter = adapter
+
+
+        recycle_view.hasFixedSize()
         if (!cardList.isNullOrEmpty()) {
             cardList.shuffle()
            // adapter.submitList(cardList)
@@ -45,6 +68,8 @@ class MainActivity : AppCompatActivity(), CardAdapter.onMatchListener {
          model.gimmieTheListAsLiveData().observe(this, Observer<MutableList<Card>> {
             updateRecyclerView(adapter,it)
         })
+
+
 
     }
 
@@ -55,69 +80,7 @@ class MainActivity : AppCompatActivity(), CardAdapter.onMatchListener {
     }
 
 
-    fun makeCard(maxColumns: Int, maxRows: Int): List<Int> {
-        //   gridView.columnCount =maxColumns
-        //    gridView.rowCount =maxRows
-        //get total item count
-        var itemsCount = maxColumns * maxRows
-        if (itemsCount % 2 == 0) {
-            Toast.makeText(this, "is even", Toast.LENGTH_SHORT).show()
-            //cool game it winnable
-        } else {
-            //game would be unwinnable so we add one to row
-            itemsCount = maxColumns * (maxRows + 1)
-            Toast.makeText(
-                this,
-                "uh oh! we had to add a row, can you figure out why? Hint: we want you to be able to win!",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-        for (i in 0 until itemsCount) {
-            //we're gonna make cards now
 
-            val newCard = Card()
-
-            when (i % 7) {
-                0 -> newCard.apply {
-                    name = "face"
-                    fronImage = R.drawable.face
-                    gValue = i
-                }
-                1 -> newCard.apply {
-                    name = "birdone"
-                    fronImage = R.drawable.birdone
-                    gValue = i
-                }
-                2 -> newCard.apply {
-                    name = "birdtwo"
-                    fronImage = R.drawable.birdtwo
-                    gValue = i
-                }
-                3 -> newCard.apply {
-                    name = "birdthree"
-                    fronImage = R.drawable.birdthree
-                    gValue = i
-                }
-                4 -> newCard.apply {
-                    name = "birdfour"
-                    fronImage = R.drawable.birdfour
-                    gValue = i
-                }
-                5 -> newCard.apply {
-                    name = "birdfive"
-                    fronImage = R.drawable.birdfive
-                    gValue = i
-                }
-                6 -> newCard.apply {
-                    name = "birdsix"
-                    fronImage = R.drawable.birdsix
-                    gValue = i
-                }
-            }
-            cardList.add(newCard)
-        }
-        return listOf(maxColumns,maxRows,itemsCount,cardList.size)
-    }
 
 
         //check tile will check the tile clicked,

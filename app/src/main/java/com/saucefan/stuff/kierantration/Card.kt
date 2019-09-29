@@ -4,7 +4,8 @@ import android.media.Image
 
 data class Card (
     var name: String?=null,
-    var fronImage: Int?=null ,
+    var fronImage: Int?=null,
+    var positionInList:Int?=null,
     var gValue:Int?=null,
     var backImage:Int? =R.drawable.cardback
   //for matching,=
