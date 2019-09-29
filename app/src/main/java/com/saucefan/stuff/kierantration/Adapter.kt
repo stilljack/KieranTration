@@ -30,9 +30,10 @@ class CardAdapter(context: Context): androidx.recyclerview.widget.ListAdapter<Ca
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.grid_view,parent,false)
         val layoutParams =  itemView.layoutParams
-        layoutParams.height = (parent.height * 3 as Int)
-        itemView.setLayoutParams(layoutParams)
-        return CardViewHolder(itemView)
+
+        val cv=CardViewHolder(itemView)
+
+        return cv
     }
 
 
@@ -61,6 +62,11 @@ class CardAdapter(context: Context): androidx.recyclerview.widget.ListAdapter<Ca
         return getItem(position)
     }
 
+    override fun submitList(list: MutableList<Card>?) {
+        super.submitList(list)
+
+    }
+
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         val currentCard: Card
@@ -72,8 +78,9 @@ class CardAdapter(context: Context): androidx.recyclerview.widget.ListAdapter<Ca
             currentCard=getItemAt(position)
             Picasso.get()
                 .load(currentCard.backImage as Int)
-                .resize(75,75)
+               // .resize(75,75)
                 .centerInside()
+                .fit()
                 .into(holder.cardBack)
             holder.cardBack.setOnClickListener{
                 listener.match(currentCard,currentCard)

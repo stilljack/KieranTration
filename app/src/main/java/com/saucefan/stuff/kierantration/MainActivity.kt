@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), CardAdapter.onMatchListener {
 
 
     fun updateRecyclerView(adapter: CardAdapter, list: MutableList<Card>) {
-        adapter.submitList(list as List<Card>)
+        adapter.submitList(list)
         adapter.notifyDataSetChanged()
     }
 
