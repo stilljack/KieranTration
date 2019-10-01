@@ -80,7 +80,7 @@ class CardAdapter(context: Context): androidx.recyclerview.widget.ListAdapter<Ca
                 .load(currentCard.backImage as Int)
                // .resize(75,75)
                 .centerInside()
-                .fit()
+             //   .fit()
                 .into(holder.cardBack)
             holder.cardBack.setOnClickListener{
                 listener.match(currentCard,currentCard)

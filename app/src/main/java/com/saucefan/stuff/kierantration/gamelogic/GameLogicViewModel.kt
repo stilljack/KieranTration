@@ -3,6 +3,7 @@ package com.saucefan.stuff.kierantration.gamelogic
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
@@ -115,7 +116,7 @@ class GameLogicViewModel(application:Application) : AndroidViewModel(application
                         name = "face"
                         fronImage = R.drawable.face
                         positionInList=i
-                        gValue = r.nextInt(0,100)
+                        gValue = View.VISIBLE
                     }
                     1 -> newCard.apply {
                         name = "birdone"

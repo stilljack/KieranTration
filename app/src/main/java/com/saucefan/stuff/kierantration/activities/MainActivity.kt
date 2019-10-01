@@ -1,6 +1,7 @@
 package com.saucefan.stuff.kierantration.activities
 
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.GridView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -77,12 +78,11 @@ class MainActivity : AppCompatActivity(),
              gridViewAdapter = CardGridAdapter(this,rows,columns)
              gridview.adapter=gridViewAdapter
              gridview.numColumns=columns
-             gridview.verticalSpacing = 0
-             gridview.gravity = 77
+        //     gridview.verticalSpacing = 0
+        //     gridview.gravity = 77
 
-
-
-             gridview.columnWidth = (displayWidth/columns)
+             gridview.columnWidth = (displayWidth/columns -20)
+         //    gridview.layoutParams = ViewGroup.
           //   gridview.layoutParams.=(displayHeight/rows)
         }
 

@@ -47,9 +47,11 @@ class CardGridAdapter( val context: Context,val rows:Int,val columns:Int) :BaseA
             // 2
             view =inflater.inflate(R.layout.grid_view,parent,false)
 
-                    val i =""
-            view.layoutParams.height=(displayHeight/rows)
-            view.layoutParams.width=(displayWidth/columns)
+
+            //i have no idea why this works to keep them from scrolling,
+            // this is janky and hacky but it seems to work and i am so fing done struggling with it
+           view.layoutParams.height=((displayHeight/rows)*0.66).toInt()
+            view.layoutParams.width=((displayWidth/columns)*0.66).toInt()
             // 3
             holder = ViewHolder()
             holder.cardBack = view.cardBack
@@ -57,38 +59,40 @@ class CardGridAdapter( val context: Context,val rows:Int,val columns:Int) :BaseA
 
             // 4
             view.tag = holder
+            view.cardBack.tag=currentCard
+
+
+            Picasso.get()
+                .load(currentCard.backImage as Int)
+         //       .resize(displayWidth/columns,displayHeight/rows)
+        //        .centerInside()
+                .into(holder.cardBack)
+            Picasso.get()
+                .load(currentCard.fronImage as Int)
+      //          .resize(displayWidth/columns,displayHeight/rows)
+       //         .centerInside()
+                .into(holder.cardFront)
+
+            view.setOnClickListener {
+                if(holder.cardBack.visibility==View.VISIBLE){
+                    holder.cardBack.visibility=View.INVISIBLE
+                    holder.cardFront.visibility=View.VISIBLE
+                }
+                else {
+                    holder.cardBack.visibility=View.VISIBLE
+                    holder.cardFront.visibility=View.INVISIBLE
+
+                }
+            }
         } else {
             // 5
             view = convertView
             holder = convertView.tag as ViewHolder
         }
 
-          view.cardBack.tag=currentCard
 
 
-          Picasso.get()
-              .load(currentCard.backImage as Int)
-              .resize(displayWidth/columns,displayHeight/rows)
-              .centerInside()
-              .into(holder.cardBack)
-        Picasso.get()
-            .load(currentCard.fronImage as Int)
-          .resize(displayWidth/columns,displayHeight/rows)
-            .centerInside()
-            .into(holder.cardFront)
 
-
-        view.setOnClickListener {
-           if(view.cardBack.visibility==View.VISIBLE){
-               view.cardBack.visibility=View.INVISIBLE
-               view.cardFront.visibility=View.VISIBLE
-            }
-            else {
-               view.cardBack.visibility=View.VISIBLE
-               view.cardFront.visibility=View.INVISIBLE
-
-            }
-        }
         return view
     }
 
