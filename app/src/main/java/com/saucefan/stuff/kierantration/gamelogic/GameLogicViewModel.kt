@@ -1,9 +1,12 @@
 package com.saucefan.stuff.kierantration.gamelogic
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 
 import kotlin.random.Random
 import com.saucefan.stuff.kierantration.Card
@@ -13,7 +16,7 @@ import com.saucefan.stuff.kierantration.R
 class GameLogicViewModel(application:Application) : AndroidViewModel(application) {
 
 
-
+ val app=application
 
     //here's where we're gonna store the current game, that way hopefully it will live through view changes.
    /* val LiveList: MutableLiveData<MutableList<Card>> by lazy {
@@ -26,6 +29,9 @@ class GameLogicViewModel(application:Application) : AndroidViewModel(application
         var cardOne: Card = Card()
         var cardList = mutableListOf<Card>()
         var gState:GameState = GameState.NEW
+
+
+
     }
 
 
@@ -63,6 +69,7 @@ class GameLogicViewModel(application:Application) : AndroidViewModel(application
         if (gState == GameState.NEW) {
             makeCards(ints[0], ints[1], getApplication<Application>().applicationContext)
             gState =GameState.PLAYING
+            cardList.shuffle()
         }
         if(gState ==GameState.PLAYING || gState ==GameState.WON) {
             return

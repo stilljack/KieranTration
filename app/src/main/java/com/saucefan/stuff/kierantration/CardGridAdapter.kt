@@ -13,11 +13,17 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.grid_view.view.*
 
 
-class CardGridAdapter( val context: Context) :BaseAdapter( ) {
+class CardGridAdapter( val context: Context,val rows:Int,val columns:Int) :BaseAdapter( ) {
  //   lateinit var dataSource:MutableList<Card>
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     lateinit var listener:onMatchListener
+    val display =  context.resources.displayMetrics
+    var displayWidth = display.widthPixels;
+    var displayHeight = display.heightPixels
+
+
     val flipedCardPosition:Int =0
+
     interface onMatchListener{
         fun clickCard(card: Card):Int
     }
@@ -41,6 +47,9 @@ class CardGridAdapter( val context: Context) :BaseAdapter( ) {
             // 2
             view =inflater.inflate(R.layout.grid_view,parent,false)
 
+                    val i =""
+            view.layoutParams.height=(displayHeight/rows)
+            view.layoutParams.width=(displayWidth/columns)
             // 3
             holder = ViewHolder()
             holder.cardBack = view.cardBack
@@ -59,12 +68,12 @@ class CardGridAdapter( val context: Context) :BaseAdapter( ) {
 
           Picasso.get()
               .load(currentCard.backImage as Int)
-              .resize(200,200)
+              .resize(displayWidth/columns,displayHeight/rows)
               .centerInside()
               .into(holder.cardBack)
         Picasso.get()
             .load(currentCard.fronImage as Int)
-            .resize(200,200)
+          .resize(displayWidth/columns,displayHeight/rows)
             .centerInside()
             .into(holder.cardFront)
 

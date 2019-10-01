@@ -1,6 +1,7 @@
 package com.saucefan.stuff.kierantration.activities
 
 import android.os.Bundle
+import android.widget.GridView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -15,6 +16,9 @@ import com.saucefan.stuff.kierantration.gamelogic.GameLogicViewModel
 
 
 class MainActivity : AppCompatActivity(),
+
+
+
     CardGridAdapter.onMatchListener {
     override fun clickCard(card: Card): Int {
         if(model.checkCard(card)==1) {
@@ -22,6 +26,10 @@ class MainActivity : AppCompatActivity(),
         }
         return 0
     }
+
+
+
+
 
 
     private lateinit var gridViewAdapter: CardGridAdapter
@@ -35,6 +43,9 @@ class MainActivity : AppCompatActivity(),
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val display =  this.resources.displayMetrics
+        var displayWidth = display.widthPixels;
+        var displayHeight = display.heightPixels
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         // get the view model
@@ -61,12 +72,18 @@ class MainActivity : AppCompatActivity(),
 */
 
          if (!cardList.isNullOrEmpty()) {
-            cardList.shuffle()
            // adapter.submitList(cardList)
             Timber.i(cardList.toString())
-             gridViewAdapter = CardGridAdapter(this)
+             gridViewAdapter = CardGridAdapter(this,rows,columns)
              gridview.adapter=gridViewAdapter
              gridview.numColumns=columns
+             gridview.verticalSpacing = 0
+             gridview.gravity = 77
+
+
+
+             gridview.columnWidth = (displayWidth/columns)
+          //   gridview.layoutParams.=(displayHeight/rows)
         }
 
        /* model.gimmieTheListAsLiveData().observe(this, Observer<MutableList<Card>> {
