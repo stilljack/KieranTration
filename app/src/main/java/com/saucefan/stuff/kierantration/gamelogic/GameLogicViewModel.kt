@@ -1,18 +1,13 @@
-package com.saucefan.stuff.kierantration
+package com.saucefan.stuff.kierantration.gamelogic
 
 import android.app.Application
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 
-import com.saucefan.stuff.kierantration.gamelogic.GameState
-import timber.log.Timber
 import kotlin.random.Random
-import android.os.Bundle
-import android.app.Activity
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
+import com.saucefan.stuff.kierantration.Card
+import com.saucefan.stuff.kierantration.R
 
 
 class GameLogicViewModel(application:Application) : AndroidViewModel(application) {
@@ -28,7 +23,7 @@ class GameLogicViewModel(application:Application) : AndroidViewModel(application
 
 
     companion object {
-        var cardOne:Card =Card()
+        var cardOne: Card = Card()
         var cardList = mutableListOf<Card>()
         var gState:GameState = GameState.NEW
     }
@@ -46,33 +41,30 @@ class GameLogicViewModel(application:Application) : AndroidViewModel(application
     //init game state
 
     //check if cardlist already has cards, if so don't remake state
-    fun checkCard(newCard: Card):Boolean {
+    fun checkCard(newCard: Card):Int {
         //if card matches imemediate previous card do this
         if (cardOne.fronImage==newCard.fronImage) {
             // is a match
-            return true
+            return 1
             }
         //if this is the first card revealed, set cardOne to a new card and let the adapter know to keep the card revealed
-        else if (cardOne ==Card()) {
+        else if (cardOne == Card()) {
             cardOne = newCard
-            return false
+            return 2
         }
         //else we need to reset cardOne to default
-        cardOne=Card()
-        //we need to return true to let the adapter know to hide the card
-        return true
+        cardOne =
+            Card()
 
-
-
-
+        return 3
     }
     fun initGameState(vararg ints:Int) {
         //check if we're in a new game
         if (gState == GameState.NEW) {
             makeCards(ints[0], ints[1], getApplication<Application>().applicationContext)
-            gState=GameState.PLAYING
+            gState =GameState.PLAYING
         }
-        if(gState==GameState.PLAYING || gState==GameState.WON) {
+        if(gState ==GameState.PLAYING || gState ==GameState.WON) {
             return
         }
 
@@ -106,8 +98,11 @@ class GameLogicViewModel(application:Application) : AndroidViewModel(application
         //we're gonna make cards now
 
             for (i in 0 until itemsCount step 2) {
-                val newCardPair = mutableListOf<Card>(Card(),Card())
-                val newCard =Card()
+                val newCardPair = mutableListOf<Card>(
+                    Card(),
+                    Card()
+                )
+                val newCard = Card()
                 when (i % 7) {
                     0 -> newCard.apply {
                         name = "face"

@@ -1,38 +1,31 @@
-package com.saucefan.stuff.kierantration
+package com.saucefan.stuff.kierantration.activities
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.size
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
-import com.saucefan.stuff.kierantration.GameLogicViewModel.Companion.cardList
+import com.saucefan.stuff.kierantration.Card
+import com.saucefan.stuff.kierantration.CardAdapter
+import com.saucefan.stuff.kierantration.CardGridAdapter
+import com.saucefan.stuff.kierantration.R
+import com.saucefan.stuff.kierantration.gamelogic.GameLogicViewModel.Companion.cardList
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.grid_view.*
 import timber.log.Timber
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import com.saucefan.stuff.kierantration.gamelogic.GameLogicViewModel
 
 
-
-
-class MainActivity : AppCompatActivity(), CardGridAdapter.onMatchListener  {
-    override fun clickCard(card: Card): Boolean {
-        if(model.checkCard(card)) {
-            return true
+class MainActivity : AppCompatActivity(),
+    CardGridAdapter.onMatchListener {
+    override fun clickCard(card: Card): Int {
+        if(model.checkCard(card)==1) {
+            return 1
         }
-        return false
+        return 0
     }
 
 
-    private lateinit var gridViewAdapter:CardGridAdapter
-    private lateinit var model:GameLogicViewModel
+    private lateinit var gridViewAdapter: CardGridAdapter
+    private lateinit var model: GameLogicViewModel
      fun match(cardOne: Card, cardTwo: Card) {
         Toast.makeText(this, cardOne.toString(), Toast.LENGTH_SHORT).show()
         cardList.remove(cardOne)
@@ -73,6 +66,7 @@ class MainActivity : AppCompatActivity(), CardGridAdapter.onMatchListener  {
             Timber.i(cardList.toString())
              gridViewAdapter = CardGridAdapter(this)
              gridview.adapter=gridViewAdapter
+             gridview.numColumns=columns
         }
 
        /* model.gimmieTheListAsLiveData().observe(this, Observer<MutableList<Card>> {

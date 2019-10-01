@@ -1,43 +1,82 @@
 package com.saucefan.stuff.kierantration
 
 import android.content.Context
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.cardview.widget.CardView
-import com.saucefan.stuff.kierantration.GameLogicViewModel.Companion.cardList
+import com.saucefan.stuff.kierantration.gamelogic.GameLogicViewModel.Companion.cardList
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.grid_view.view.*
 
 
 class CardGridAdapter( val context: Context) :BaseAdapter( ) {
  //   lateinit var dataSource:MutableList<Card>
-   // private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
     lateinit var listener:onMatchListener
     val flipedCardPosition:Int =0
     interface onMatchListener{
-        fun clickCard(card: Card):Boolean
+        fun clickCard(card: Card):Int
     }
-
-    override fun getView(position:Int, convertView:View?, parent:ViewGroup): View {
-        val currentCard:Card=getItem(position)
-          val view: ImageView= ImageView(context)
-          view.tag=currentCard
-
-
-          Picasso.get()
-              .load(currentCard.fronImage as Int)
-              .resize(75,75)
-              .centerInside()
-              .into(view)
-
+    init {
         if (context is CardGridAdapter.onMatchListener){
             listener = context
         }
+
+    }
+    override fun getView(position:Int, convertView:View?, parent:ViewGroup): View {
+        val tempflip:Boolean=false
+        val view: View
+        val holder: ViewHolder
+
+
+
+        val currentCard:Card=getItem(position)
+
+        if (convertView == null) {
+
+            // 2
+            view =inflater.inflate(R.layout.grid_view,parent,false)
+
+            // 3
+            holder = ViewHolder()
+            holder.cardBack = view.cardBack
+            holder.cardFront =  view.cardFront
+
+            // 4
+            view.tag = holder
+        } else {
+            // 5
+            view = convertView
+            holder = convertView.tag as ViewHolder
+        }
+
+          view.cardBack.tag=currentCard
+
+
+          Picasso.get()
+              .load(currentCard.backImage as Int)
+              .resize(200,200)
+              .centerInside()
+              .into(holder.cardBack)
+        Picasso.get()
+            .load(currentCard.fronImage as Int)
+            .resize(200,200)
+            .centerInside()
+            .into(holder.cardFront)
+
+
         view.setOnClickListener {
-            if(listener.clickCard(currentCard)){
+           if(view.cardBack.visibility==View.VISIBLE){
+               view.cardBack.visibility=View.INVISIBLE
+               view.cardFront.visibility=View.VISIBLE
+            }
+            else {
+               view.cardBack.visibility=View.VISIBLE
+               view.cardFront.visibility=View.INVISIBLE
 
             }
         }
@@ -56,7 +95,10 @@ class CardGridAdapter( val context: Context) :BaseAdapter( ) {
 
         return cardList.size
     }
-
+    private class ViewHolder {
+        lateinit var cardBack: ImageView
+        lateinit var cardFront: ImageView
+    }
 }
 
 /*
