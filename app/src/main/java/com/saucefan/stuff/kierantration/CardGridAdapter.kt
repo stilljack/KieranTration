@@ -1,10 +1,8 @@
 package com.saucefan.stuff.kierantration
 
 import android.content.Context
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
@@ -13,14 +11,20 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.grid_view.view.*
 
 
-class CardGridAdapter( val context: Context,val rows:Int,val columns:Int) :BaseAdapter( ) {
- //   lateinit var dataSource:MutableList<Card>
+
+
+
+class CardGridAdapter( val context: Context,val rows:Int,val columns:Int) :BaseAdapter( )
+   {
+
+    //   lateinit var dataSource:MutableList<Card>
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     lateinit var listener:onMatchListener
     val display =  context.resources.displayMetrics
     var displayWidth = display.widthPixels;
     var displayHeight = display.heightPixels
-
+    val adjustedWidth =((displayWidth/columns)*0.66).toInt()
+    val adjustHeight=((displayHeight/rows)*0.66).toInt()
 
     val flipedCardPosition:Int =0
 
@@ -44,36 +48,38 @@ class CardGridAdapter( val context: Context,val rows:Int,val columns:Int) :BaseA
 
         if (convertView == null) {
 
-            // 2
+
             view =inflater.inflate(R.layout.grid_view,parent,false)
 
 
             //i have no idea why this works to keep them from scrolling,
             // this is janky and hacky but it seems to work and i am so fing done struggling with it
-           view.layoutParams.height=((displayHeight/rows)*0.66).toInt()
-            view.layoutParams.width=((displayWidth/columns)*0.66).toInt()
-            // 3
+           view.layoutParams.height=adjustHeight
+            view.layoutParams.width=adjustedWidth
+
             holder = ViewHolder()
             holder.cardBack = view.cardBack
             holder.cardFront =  view.cardFront
 
-            // 4
+
             view.tag = holder
             view.cardBack.tag=currentCard
 
 
             Picasso.get()
                 .load(currentCard.backImage as Int)
-         //       .resize(displayWidth/columns,displayHeight/rows)
+          //      .resize(adjustedWidth,adjustHeight)
         //        .centerInside()
                 .into(holder.cardBack)
             Picasso.get()
-                .load(currentCard.fronImage as Int)
-      //          .resize(displayWidth/columns,displayHeight/rows)
+                .load(currentCard.frontImage as Int)
+        //     .resize(adjustedWidth,adjustHeight)
        //         .centerInside()
                 .into(holder.cardFront)
 
             view.setOnClickListener {
+
+                listener.clickCard(currentCard)
                 if(holder.cardBack.visibility==View.VISIBLE){
                     holder.cardBack.visibility=View.INVISIBLE
                     holder.cardFront.visibility=View.VISIBLE

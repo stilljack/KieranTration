@@ -48,7 +48,7 @@ class CardAdapter(context: Context): androidx.recyclerview.widget.ListAdapter<Ca
             override fun areContentsTheSame(oldItem: Card, newItem: Card): Boolean {
                 return oldItem.name == newItem.name &&
                         oldItem.backImage == newItem.backImage &&
-                        oldItem.fronImage == newItem.fronImage &&
+                        oldItem.frontImage == newItem.frontImage &&
                         oldItem.gValue == newItem.gValue
             }
         }

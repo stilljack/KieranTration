@@ -1,81 +1,74 @@
 package com.saucefan.stuff.kierantration.gamelogic
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.os.Debug
+import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
 
 import kotlin.random.Random
 import com.saucefan.stuff.kierantration.Card
+import com.saucefan.stuff.kierantration.MyDebugTree
 import com.saucefan.stuff.kierantration.R
+import timber.log.Timber
 
 
 class GameLogicViewModel(application:Application) : AndroidViewModel(application) {
 
 
+
  val app=application
 
     //here's where we're gonna store the current game, that way hopefully it will live through view changes.
-   /* val LiveList: MutableLiveData<MutableList<Card>> by lazy {
+   /* val liveList: MutableLiveData<MutableList<Card>> by lazy {
         MutableLiveData<MutableList<Card>>()
     }*/
-
-
+ val liveList:MutableLiveData<MutableList<Card>>  by lazy {
+        MutableLiveData<MutableList<Card>> ()
+    }
 
     companion object {
         var cardOne: Card = Card()
         var cardList = mutableListOf<Card>()
         var gState:GameState = GameState.NEW
-
-
+        lateinit var cardMap:Map<Int?,Card>
 
     }
 
+init {
+    Timber.plant(MyDebugTree())
+}
 
-
-    /*    fun gimmieTheListAsLiveData(): MutableLiveData<MutableList<Card>> {
+    fun gimmieTheListAsLiveData(): MutableLiveData<MutableList<Card>> {
             if (cardList.isNotEmpty()) {
-                LiveList.value= cardList
+                liveList.value= cardList
             }
-            return LiveList
-        }*/
-
-
-    //init game state
-
-    //check if cardlist already has cards, if so don't remake state
-    fun checkCard(newCard: Card):Int {
-        //if card matches imemediate previous card do this
-        if (cardOne.fronImage==newCard.fronImage) {
-            // is a match
-            return 1
-            }
-        //if this is the first card revealed, set cardOne to a new card and let the adapter know to keep the card revealed
-        else if (cardOne == Card()) {
-            cardOne = newCard
-            return 2
+            return liveList
         }
-        //else we need to reset cardOne to default
-        cardOne =
-            Card()
 
-        return 3
-    }
-    fun initGameState(vararg ints:Int) {
+
+    fun initGameState(vararg ints:Int):Int {
         //check if we're in a new game
+        var result:Int = 0
         if (gState == GameState.NEW) {
-            makeCards(ints[0], ints[1], getApplication<Application>().applicationContext)
+           result= makeCards(ints[0], ints[1], getApplication<Application>().applicationContext)
             gState =GameState.PLAYING
             cardList.shuffle()
+             cardMap =cardList.associate {
+                it.positionInList to it
+            }
+            val sauce = 1
+
+            Timber.i(cardMap.toString())
+            return result
         }
         if(gState ==GameState.PLAYING || gState ==GameState.WON) {
-            return
+            return 0
         }
-
+        return 0
     }
 
     //this function consumes the users number of columns and rows and populates cardlist
@@ -106,58 +99,61 @@ class GameLogicViewModel(application:Application) : AndroidViewModel(application
         //we're gonna make cards now
 
             for (i in 0 until itemsCount step 2) {
-                val newCardPair = mutableListOf<Card>(
-                    Card(),
-                    Card()
-                )
+                var newCardtwo=Card()
                 val newCard = Card()
                 when (i % 7) {
                     0 -> newCard.apply {
                         name = "face"
-                        fronImage = R.drawable.face
+                        frontImage = R.drawable.face
                         positionInList=i
-                        gValue = View.VISIBLE
+                        gValue = r.nextInt(0,1000)
                     }
                     1 -> newCard.apply {
                         name = "birdone"
-                        fronImage = R.drawable.birdone
+                        frontImage = R.drawable.birdone
                         positionInList=i
-                        gValue = r.nextInt(0,100)
+                        gValue = r.nextInt(0,1000)
                     }
                     2 -> newCard.apply {
                         name = "birdtwo"
-                        fronImage = R.drawable.birdtwo
+                        frontImage = R.drawable.birdtwo
                         positionInList=i
-                        gValue = r.nextInt(0,100)
+                        gValue = r.nextInt(0,1000)
                     }
                     3 -> newCard.apply {
                         name = "birdthree"
-                        fronImage = R.drawable.birdthree
+                        frontImage = R.drawable.birdthree
                         positionInList=i
-                        gValue = r.nextInt(0,100)
+                        gValue = r.nextInt(0,1000)
                     }
                     4 -> newCard.apply {
                         name = "birdfour"
-                        fronImage = R.drawable.birdfour
+                        frontImage = R.drawable.birdfour
                         positionInList=i
-                        gValue =r.nextInt(0,100)
+                        gValue =r.nextInt(0,1000)
                     }
                     5 -> newCard.apply {
                         name = "birdfive"
-                        fronImage = R.drawable.birdfive
+                        frontImage = R.drawable.birdfive
                         positionInList=i
-                        gValue = r.nextInt(0,100)
+                        gValue = r.nextInt(0,1000)
                     }
                     6 -> newCard.apply {
                         name = "birdsix"
-                        fronImage = R.drawable.birdsix
+                        frontImage = R.drawable.birdsix
                         positionInList=i
-                        gValue = r.nextInt(0,100)
+                        gValue = r.nextInt(0,1000)
                     }
                 }
                 cardList.add(newCard)
-                newCard.gValue=r.nextInt(0,100)
-                cardList.add(newCard)
+
+                //make a copy
+                newCardtwo.name=newCard.name
+                newCardtwo.positionInList= (i+1)
+                newCardtwo.gValue=r.nextInt(0,1000)
+                newCardtwo.backImage=newCard.backImage
+                newCardtwo.frontImage=newCard.frontImage
+                cardList.add(newCardtwo)
 
 
             }
